@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - Manage Products</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f0f2f5;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    h1, h4 {
+      color: #1e3a8a;
+    }
+    .card {
+      border-radius: 15px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 20px rgba(0,0,0,0.12);
+    }
+    .table th, .table td {
+      vertical-align: middle;
+    }
+    .btn-delete {
+      background-color: #e53935;
+      color: #fff;
+      border-radius: 8px;
+    }
+    .btn-delete:hover {
+      background-color: #d32f2f;
+    }
+    .btn-add {
+      background-color: #0d6efd;
+      color: #fff;
+      border-radius: 8px;
+    }
+    .btn-add:hover {
+      background-color: #0b5ed7;
+    }
+    .table-responsive {
+      max-height: 450px;
+      overflow-y: auto;
+    }
+    .form-control, .btn {
+      border-radius: 8px;
+    }
+    .product-img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container mt-5">
+  <h1 class="text-center mb-4"><i class="bi bi-speedometer2"></i> Admin Dashboard</h1>
+
+  <div class="row">
+    <!-- Add Product Form -->
+    <div class="col-lg-5 col-md-12 mb-4">
+      <div class="card shadow p-4">
+        <h4 class="mb-3"><i class="bi bi-plus-circle"></i> Add New Product</h4>
+        <form action="/admin" method="POST">
+          <input type="text" name="name" class="form-control mb-3" placeholder="Product Name" required>
+          <textarea name="description" class="form-control mb-3" placeholder="Description" rows="3"></textarea>
+          <input type="number" name="price" class="form-control mb-3" placeholder="Price (₹)" required>
+          <input type="text" name="category" class="form-control mb-3" placeholder="Category">
+          <input type="text" name="image" class="form-control mb-3" placeholder="Image URL">
+          <button type="submit" class="btn btn-add w-100"><i class="bi bi-plus-lg"></i> Add Product</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Product List -->
+    <div class="col-lg-7 col-md-12">
+      <div class="card shadow p-4">
+        <h4 class="mb-3"><i class="bi bi-box-seam"></i> Existing Products</h4>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Price (₹)</th>
+                <th>Category</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% products.forEach(product => { %>
+                <tr>
+                  <td>
+                    <% if(product.image) { %>
+                      <img src="<%= product.image %>" alt="<%= product.name %>" class="product-img">
+                    <% } else { %>
+                      <span class="text-muted">No Image</span>
+                    <% } %>
+                  </td>
+                  <td><%= product.name %></td>
+                  <td>₹<%= product.price %></td>
+                  <td><%= product.category || "N/A" %></td>
+                  <td>
+                    <form action="/admin/delete/<%= product._id %>" method="POST" style="display:inline;">
+                      <button class="btn btn-delete btn-sm" onclick="return confirm('Delete this product?')">
+                        <i class="bi bi-trash"></i> Delete
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
